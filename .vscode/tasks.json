@@ -6,8 +6,7 @@
             "type": "shell",
             "command": "cargo run -- list",
             "presentation": {
-                "reveal": "always",
-                "panel": "new"
+                "reveal": "always"
             },
             "problemMatcher": []
         },
