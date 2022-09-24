@@ -1,25 +1,50 @@
-mod command;
+#![allow(unused)]
+
+mod host_file;
 mod host;
 mod disp;
 
-use command::Command;
+use clap::{App, Arg, Command};
+use clap::arg;
+use host::Host;
+
 
 fn main() {
-    let res = run();
-    if res.is_err() {
-        println!("{}", res.unwrap_err());
-        std::process::exit(1);
-    }
-}
 
-fn run() -> Result<(), String> {
-    let args: Vec<String> = std::env::args().collect();
-    if args.len() == 1 {
-        // TODO: Display help
-        println!("Not enough arguments");
-        std::process::exit(1);
+    let matches = App::new("hfm")
+        .version(env!("CARGO_PKG_VERSION"))
+        .about("A simple hosts file manager")
+        .subcommand(
+            Command::new("list")
+                .about("List your configured hosts")
+        )
+        .subcommand(
+            Command::new("add")
+                .about("Add a new host configuration")
+                .arg(arg!([ip] "The server ip address").required(true))
+                .arg(arg!([hostname] "The host name").required(true))
+        )
+        .subcommand(
+            Command::new("remove")
+                .about("Remove a configuration")
+                .arg(arg!([id] "The id of the host configuration").required(true))
+        )
+        .get_matches();
+
+    if let Some(matches) = matches.subcommand_matches("list") {
+        disp::list_hosts();
     }
-    let command = Command::new(args[1].clone(), args[2..].to_vec());
-    command.execute();
-    Ok(())
+
+    if let Some(matches) = matches.subcommand_matches("add") {
+        let ip = matches.get_one::<String>("ip").unwrap().clone();
+        let hostname = matches.get_one::<String>("hostname").unwrap().clone();
+        let host = host::Host::new(0, ip, hostname);
+        host_file::add_host(host);
+    }
+
+    if let Some(matches) = matches.subcommand_matches("remove") {
+        let id = matches.get_one::<String>("id").unwrap().clone();
+        println!("ID: {}", id);
+    }
+
 }

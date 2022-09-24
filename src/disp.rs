@@ -41,6 +41,7 @@ fn print_separator(col_widths: &Vec<usize>) {
 
 pub fn list_hosts() {
     // Read the hosts file
+    // let data = std::fs::read_to_string("./test_host_file").expect("Unable to read file");
     let data = std::fs::read_to_string("C:/Windows/System32/drivers/etc/hosts").expect("Unable to read file");
 
     // Filter out comments and empty lines

@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub struct Host {
     pub id: usize,
     pub ip: String,
@@ -14,7 +15,7 @@ impl Host {
     }
 
     pub fn to_string(&self) -> String {
-        format!("IP: {}, Hostname: {}", self.ip, self.hostname)
+        format!("{} {}", self.ip, self.hostname)
     }
 
     pub fn to_vec(&self) -> Vec<String> {
