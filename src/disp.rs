@@ -1,4 +1,4 @@
-use crate::host::Host;
+use crate::{host::Host, config, host_file::read_hosts};
 
 fn print_table(content: &Vec<Vec<String>>) {
     let cols = content[0].len();
@@ -40,22 +40,11 @@ fn print_separator(col_widths: &Vec<usize>) {
 }
 
 pub fn list_hosts() {
-    // Read the hosts file
-    // let data = std::fs::read_to_string("./test_host_file").expect("Unable to read file");
-    let data = std::fs::read_to_string("C:/Windows/System32/drivers/etc/hosts").expect("Unable to read file");
-
-    // Filter out comments and empty lines
-    let lines = data.lines().filter(|l| !l.starts_with("#") && !l.is_empty());
-
-    // Parse each line into a Host struct
-    // TODO: Move this code to a parser
-    let hosts = lines.enumerate().map(|(i, l)| {
-        let parts: Vec<&str> = l.split(" ").collect();
-        Host::new(i, parts[0].to_string(), parts[1].to_string())
-    });
+    
+    let hosts: Vec<Host> = read_hosts();
 
     // Convert hosts into 2d vector
-    let host_vec: Vec<Vec<String>> = hosts.map(|h| {
+    let host_vec: Vec<Vec<String>> = hosts.iter().map(|h| {
         h.to_vec()
     }).collect();
 

@@ -3,14 +3,16 @@ pub struct Host {
     pub id: usize,
     pub ip: String,
     pub hostname: String,
+    pub line_number: usize,
 }
 
 impl Host {
-    pub fn new(id: usize, ip: String, hostname: String) -> Host {
+    pub fn new(id: usize, ip: String, hostname: String, line_number: usize) -> Host {
         Host {
             id,
             ip,
             hostname,
+            line_number,
         }
     }
 

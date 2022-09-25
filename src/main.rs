@@ -1,13 +1,13 @@
 #![allow(unused)]
 
-mod host_file;
+mod config;
 mod host;
+mod host_file;
 mod disp;
 
 use clap::{App, Arg, Command};
 use clap::arg;
 use host::Host;
-
 
 fn main() {
 
@@ -38,13 +38,13 @@ fn main() {
     if let Some(matches) = matches.subcommand_matches("add") {
         let ip = matches.get_one::<String>("ip").unwrap().clone();
         let hostname = matches.get_one::<String>("hostname").unwrap().clone();
-        let host = host::Host::new(0, ip, hostname);
+        let host = host::Host::new(0, ip, hostname, 0);
         host_file::add_host(host);
     }
 
     if let Some(matches) = matches.subcommand_matches("remove") {
-        let id = matches.get_one::<String>("id").unwrap().clone();
-        println!("ID: {}", id);
+        let id = matches.get_one::<String>("id").unwrap().parse::<usize>().unwrap();
+        host_file::remove_host(id);
     }
 
 }
