@@ -1,33 +1,29 @@
 #![allow(unused)]
 
 mod config;
+mod disp;
 mod host;
 mod host_file;
-mod disp;
 
-use clap::{App, Arg, Command};
 use clap::arg;
+use clap::{App, Arg, Command};
 use host::Host;
 
 fn main() {
-
     let matches = App::new("hfm")
         .version(env!("CARGO_PKG_VERSION"))
         .about("A simple hosts file manager")
-        .subcommand(
-            Command::new("list")
-                .about("List your configured hosts")
-        )
+        .subcommand(Command::new("list").about("List your configured hosts"))
         .subcommand(
             Command::new("add")
                 .about("Add a new host configuration")
                 .arg(arg!([ip] "The server ip address").required(true))
-                .arg(arg!([hostname] "The host name").required(true))
+                .arg(arg!([hostname] "The host name").required(true)),
         )
         .subcommand(
             Command::new("remove")
                 .about("Remove a configuration")
-                .arg(arg!([id] "The id of the host configuration").required(true))
+                .arg(arg!([id] "The id of the host configuration").required(true)),
         )
         .get_matches();
 
@@ -43,8 +39,11 @@ fn main() {
     }
 
     if let Some(matches) = matches.subcommand_matches("remove") {
-        let id = matches.get_one::<String>("id").unwrap().parse::<usize>().unwrap();
+        let id = matches
+            .get_one::<String>("id")
+            .unwrap()
+            .parse::<usize>()
+            .unwrap();
         host_file::remove_host(id);
     }
-
 }
