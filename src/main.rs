@@ -13,15 +13,21 @@ fn main() {
     let matches = App::new("hfm")
         .version(env!("CARGO_PKG_VERSION"))
         .about("A simple hosts file manager")
-        .subcommand(Command::new("list").about("List your configured hosts"))
+        .subcommand(
+            Command::new("list")
+                .alias("ls")
+                .about("List your configured hosts"),
+        )
         .subcommand(
             Command::new("add")
+                .alias("a")
                 .about("Add a new host configuration")
                 .arg(arg!([ip] "The server ip address").required(true))
                 .arg(arg!([hostname] "The host name").required(true)),
         )
         .subcommand(
             Command::new("remove")
+                .alias("rm")
                 .about("Remove a configuration")
                 .arg(arg!([id] "The id of the host configuration").required(true)),
         )
