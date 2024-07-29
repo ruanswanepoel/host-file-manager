@@ -14,6 +14,11 @@ fn main() {
         .version(env!("CARGO_PKG_VERSION"))
         .about("A simple hosts file manager")
         .subcommand(
+            Command::new("open")
+                .alias("o")
+                .about("Open your hosts file"),
+        )
+        .subcommand(
             Command::new("list")
                 .alias("ls")
                 .about("List your configured hosts"),
@@ -28,10 +33,17 @@ fn main() {
         .subcommand(
             Command::new("remove")
                 .alias("rm")
-                .about("Remove a configuration")
-                .arg(arg!([id] "The id of the host configuration").required(true)),
+                .about("Remove a host configuration")
+                .arg(
+                    arg!([id] "The id of the host configuration (According to the list command)")
+                        .required(true),
+                ),
         )
         .get_matches();
+
+    if let Some(matches) = matches.subcommand_matches("open") {
+        let result = open::that(config::HOSTS_FILE_PATH);
+    }
 
     if let Some(matches) = matches.subcommand_matches("list") {
         disp::list_hosts();
